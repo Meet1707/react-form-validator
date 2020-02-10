@@ -1,10 +1,35 @@
+body{
+  background-color: #4a4e69 !important;
+  font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+  "Droid Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .text-error{
   color: red;
 }
 .card{
   margin-top: 50px;
   padding: 25px;
-  border: 2px black solid !important;
-  box-shadow: 5px 5px black !important;
-  margin-bottom: 30px !important;
+  border-radius: 6px;
+  box-shadow: 0px 8px 36px #222;
+  background-color: #fefefe;
+}
+button{
+  padding: 0.938em !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background-color: #22223b !important;
+  color: #fefefe !important;
+  min-width: 100% !important;
+  cursor: pointer !important;
+  margin-right: 500px !important;
+  margin-top: 0.5em !important;
+  padding: 0.938em !important;
+}
+button:hover {
+  background-color: #4a4e69 !important;
+  color: #fefefe !important;
 }

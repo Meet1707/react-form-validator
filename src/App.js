@@ -277,7 +277,7 @@ class App extends React.Component {
             </Row>
             <Row>
               <Col>
-                <Button type="button">Submit</Button>
+                <Button type="button" className="mx-auto w-50">Submit</Button>
               </Col>
             </Row>
           </Form>
