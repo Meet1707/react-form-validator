@@ -10,10 +10,11 @@ class App extends React.Component {
       email: "",
       mobile: "",
       hobbies: "",
-      occupation: "",
+      city: "",
       password: "",
       cpassword: "",
       gender: "",
+      occupation: ""
     },
     fname: "",
     lname: "",
@@ -21,15 +22,16 @@ class App extends React.Component {
     email: "",
     mobile: "",
     hobbies: "",
-    occupation: "",
+    city: "",
     password: "",
     cpassword: "",
     gender: "male",
+    occupation: ""
   }
   handleEvent = (event) => {
-    const isRadio = event.target.type === "radio";
+    let isCheckBox = event.target.type === "checkbox";
     this.setState({
-      [event.target.name]: isRadio
+      [event.target.name]: isCheckBox
         ? event.target.checked
         : event.target.value
     })
@@ -89,7 +91,7 @@ class App extends React.Component {
           : this.setState({
             error: {
               ...error,
-              [event.target.name]: "Invalid password"
+              [event.target.name]: "Password must be greater than 6 digit & contains 1 special character"
             }
           })
         break;
@@ -126,10 +128,10 @@ class App extends React.Component {
     }
   }
   render() {
-    let { error, fname, lname, mname, mobile, email, occupation, password, cpassword, gender } = this.state;
+    let { error, fname, lname, mname, mobile, email, city, password, cpassword, occupation } = this.state;
     return (
       <div>
-        <div className="container">
+        <div className="container card">
           <Form>
             <Row>
               <Col>
@@ -182,7 +184,7 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Pasword</Form.Label>
+                  <Form.Label>Password</Form.Label>
                   <Form.Control type="password" placeholder="Enter password" name="password"
                     value={password}
                     onBlur={this.validator}
@@ -209,7 +211,7 @@ class App extends React.Component {
               <Col>
                 <Form.Label>Gender</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="radio" label="Male" name="gender" value={"male"}
+                  <Form.Check inline type="radio" label="Male" name="gender" value="male"
                     checked
                     onChange={this.handleEvent} />
                   <Form.Check inline type="radio" name="gender" label="Female" value="female"
@@ -233,24 +235,34 @@ class App extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col md="6">
+              <Col md="2">
                 <Form.Group>
-                  <Form.Label>Occupation</Form.Label>
-
-                  <Form.Control as="select" name="occupation" value={occupation}
-                    placeholder="Select"
+                  <Form.Label>City</Form.Label>
+                  <Form.Control as="select" name="city" value={city}
+                    onBlur={this.required}
                     onChange={this.handleEvent}>
                     <option value="" label="-- select ---" />
-                    <option value="student" label="student" />
-                    <option value="engineer" label="engineer" />
-                    <option value="doctor" label="doctor" />
+                    <option value="ahmedabad" label="Ahmedabad" />
+                    <option value="surat" label="Surat" />
+                    <option value="rajkot" label="Rajkot" />
                   </Form.Control>
                   <Form.Text className="text-error">
-                    {error.occupation}
+                    {error.city}
                   </Form.Text>
                 </Form.Group>
               </Col>
-              <Col>
+              <Col md="4">
+                <Form.Label>Occupation</Form.Label>
+                <Form.Group>
+                  <Form.Check inline type="checkbox" value="student" name="occupation" label="Student" onChange={this.handleEvent} />
+                  <Form.Check inline type="checkbox" value="engineer" name="occupation" label="Engineer" onChange={this.handleEvent} />
+                  <Form.Check inline type="checkbox" value="doctor" name="occupation" label="Doctor" onChange={this.handleEvent} />
+                </Form.Group>
+                <Form.Text className="text-error">
+                  {error.occupation}
+                </Form.Text>
+              </Col>
+              <Col md="6">
                 <Form.Label>Hobbies</Form.Label>
                 <Form.Group>
                   <Form.Check inline type="checkbox" label="Reading" />
