@@ -2,10 +2,7 @@ body{
   background-color: #4a4e69 !important;
   font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
   "Droid Sans", "Helvetica Neue", sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
 }
 .text-error{
   color: red;
@@ -20,12 +17,11 @@ body{
 button{
   padding: 0.938em !important;
   border: none !important;
-  border-radius: 4px !important;
+  border-radius: 5px !important;
   background-color: #22223b !important;
   color: #fefefe !important;
   min-width: 100% !important;
-  cursor: pointer !important;
-  padding: 0.938em !important;
+  cursor: pointer   ;
 }
 button:hover {
   background-color: #4a4e69 !important;

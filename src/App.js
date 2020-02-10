@@ -16,24 +16,40 @@ class App extends React.Component {
       gender: "",
       occupation: ""
     },
-    fname: "",
-    lname: "",
-    mname: "",
-    email: "",
-    mobile: "",
-    hobbies: "",
-    city: "",
-    password: "",
-    cpassword: "",
-    gender: "male",
-    occupation: ""
+    formData: {
+      fname: "",
+      lname: "",
+      mname: "",
+      email: "",
+      mobile: "",
+      city: "",
+      password: "",
+      cpassword: "",
+      gender: "male",
+      occupation: ""
+    },
+    hobbies: [],
+    submitMsg: ""
+  }
+
+  handleHobbies = (event) => {
+    const { hobbies } = this.state
+    let index;
+    if (event.target.checked) {
+      hobbies.push(event.target.value)
+    } else {
+      index = hobbies.indexOf(event.target.value)
+      hobbies.splice(index, 1)
+    }
+    this.setState({ hobbies: hobbies })
   }
   handleEvent = (event) => {
-    let isCheckBox = event.target.type === "checkbox";
+    const { formData } = this.state;
     this.setState({
-      [event.target.name]: isCheckBox
-        ? event.target.checked
-        : event.target.value
+      formData: {
+        ...formData,
+        [event.target.name]: event.target.value
+      }
     })
   }
   required = (event) => {
@@ -53,11 +69,10 @@ class App extends React.Component {
       })
   }
   validator = (event) => {
-    let mobileRegex = /^\d{10}$/;
-    let emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
-    let passwordRegex = /^[#\w@_-]{6,15}$/;
-    let name = event.target.name;
-    let { error, mobile, email, password, cpassword } = this.state;
+    const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /^[#\w@_-]{6,15}$/;
+    const name = event.target.name;
+    const { error } = this.state;
+    const { mobile, email, password, cpassword } = this.state.formData;
     switch (name) {
       case 'fname':
         this.required(event);
@@ -127,8 +142,19 @@ class App extends React.Component {
         break;
     }
   }
+  submitData = () => {
+    const { error, formData, hobbies } = this.state;
+    let submit = false
+    error.map(err => {
+      err=""?submit=true:submit=false
+    },formData.map(fdata =>{
+      fdata=""?submit=false:submit=true
+    }))
+     console.log(submit)
+  }
   render() {
-    let { error, fname, lname, mname, mobile, email, city, password, cpassword, occupation } = this.state;
+    const { error } = this.state;
+    const { fname, lname, mname, mobile, email, city, password, cpassword, occupation, gender } = this.state.formData;
     return (
       <div>
         <div className="container card">
@@ -220,7 +246,7 @@ class App extends React.Component {
               </Col>
             </Row>
             <Row>
-            <Col>
+              <Col>
                 <Form.Group>
                   <Form.Label>City</Form.Label>
                   <Form.Control as="select" name="city" value={city}
@@ -240,21 +266,27 @@ class App extends React.Component {
                 <Form.Label>Gender</Form.Label>
                 <Form.Group>
                   <Form.Check inline type="radio" label="Male" name="gender" value="male"
-                    checked
+                    checked={gender === "male"}
                     onChange={this.handleEvent} />
                   <Form.Check inline type="radio" name="gender" label="Female" value="female"
+                    checked={gender === "female"}
                     onChange={this.handleEvent} />
                 </Form.Group>
               </Col>
-             
             </Row>
             <Row>
               <Col>
                 <Form.Label>Occupation</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" value="student" name="occupation" label="Student" onChange={this.handleEvent} />
-                  <Form.Check inline type="checkbox" value="engineer" name="occupation" label="Engineer" onChange={this.handleEvent} />
-                  <Form.Check inline type="checkbox" value="doctor" name="occupation" label="Doctor" onChange={this.handleEvent} />
+                  <Form.Check inline type="checkbox" value="student" name="occupation" label="Student"
+                    checked={occupation === "student"}
+                    onChange={this.handleEvent} />
+                  <Form.Check inline type="checkbox" value="engineer" name="occupation" label="Engineer"
+                    checked={occupation === "engineer"}
+                    onChange={this.handleEvent} />
+                  <Form.Check inline type="checkbox" value="doctor" name="occupation" label="Doctor"
+                    checked={occupation === "doctor"}
+                    onChange={this.handleEvent} />
                 </Form.Group>
                 <Form.Text className="text-error">
                   {error.occupation}
@@ -263,10 +295,10 @@ class App extends React.Component {
               <Col>
                 <Form.Label>Hobbies</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" label="Reading" />
-                  <Form.Check inline type="checkbox" label="Writing" />
-                  <Form.Check inline type="checkbox" label="Singing" />
-                  <Form.Check inline type="checkbox" label="Programming" />
+                  <Form.Check inline type="checkbox" label="Reading" value="Reading" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Writing" value="Writing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Singing" value="Singing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Programming" value="Programming" onChange={this.handleHobbies} />
                 </Form.Group>
                 <Form.Text className="text-error">
                   {error.hobbies}
@@ -275,7 +307,7 @@ class App extends React.Component {
             </Row>
             <Row>
               <Col>
-                <Button type="button" className="mx-auto w-50">Submit</Button>
+                <Button type="button" onClick={this.submitData}>Submit</Button>
               </Col>
             </Row>
           </Form>
