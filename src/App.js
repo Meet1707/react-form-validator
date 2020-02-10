@@ -216,9 +216,6 @@ class App extends React.Component {
                     onChange={this.handleEvent} />
                   <Form.Check inline type="radio" name="gender" label="Female" value="female"
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.gender}
-                  </Form.Text>
                 </Form.Group>
               </Col>
               <Col>
