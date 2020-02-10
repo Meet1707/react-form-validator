@@ -168,7 +168,7 @@ class App extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col md="8">
+              <Col>
                 <Form.Group>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" name="email"
@@ -177,6 +177,18 @@ class App extends React.Component {
                     onChange={this.handleEvent} />
                   <Form.Text className="text-error">
                     {error.email}
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Mobile number</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Mobile number" name="mobile"
+                    value={mobile}
+                    onBlur={this.validator}
+                    onChange={this.handleEvent} />
+                  <Form.Text className="text-error">
+                    {error.mobile}
                   </Form.Text>
                 </Form.Group>
               </Col>
@@ -208,31 +220,7 @@ class App extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <Form.Label>Gender</Form.Label>
-                <Form.Group>
-                  <Form.Check inline type="radio" label="Male" name="gender" value="male"
-                    checked
-                    onChange={this.handleEvent} />
-                  <Form.Check inline type="radio" name="gender" label="Female" value="female"
-                    onChange={this.handleEvent} />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Mobile number</Form.Label>
-                  <Form.Control type="text" placeholder="Enter Mobile number" name="mobile"
-                    value={mobile}
-                    onBlur={this.validator}
-                    onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.mobile}
-                  </Form.Text>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md="2">
+            <Col>
                 <Form.Group>
                   <Form.Label>City</Form.Label>
                   <Form.Control as="select" name="city" value={city}
@@ -248,7 +236,20 @@ class App extends React.Component {
                   </Form.Text>
                 </Form.Group>
               </Col>
-              <Col md="4">
+              <Col>
+                <Form.Label>Gender</Form.Label>
+                <Form.Group>
+                  <Form.Check inline type="radio" label="Male" name="gender" value="male"
+                    checked
+                    onChange={this.handleEvent} />
+                  <Form.Check inline type="radio" name="gender" label="Female" value="female"
+                    onChange={this.handleEvent} />
+                </Form.Group>
+              </Col>
+             
+            </Row>
+            <Row>
+              <Col>
                 <Form.Label>Occupation</Form.Label>
                 <Form.Group>
                   <Form.Check inline type="checkbox" value="student" name="occupation" label="Student" onChange={this.handleEvent} />
@@ -259,7 +260,7 @@ class App extends React.Component {
                   {error.occupation}
                 </Form.Text>
               </Col>
-              <Col md="6">
+              <Col>
                 <Form.Label>Hobbies</Form.Label>
                 <Form.Group>
                   <Form.Check inline type="checkbox" label="Reading" />
