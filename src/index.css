@@ -27,3 +27,6 @@ button:hover {
   background-color: #4a4e69 !important;
   color: #fefefe !important;
 }
+.submit-msg{
+  color: green !important;
+}

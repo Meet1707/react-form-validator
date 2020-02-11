@@ -5,156 +5,159 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 class App extends React.Component {
   state = {
     error: {
-      fname: "",
-      lname: "",
-      email: "",
-      mobile: "",
-      hobbies: "",
-      city: "",
-      password: "",
-      cpassword: "",
-      gender: "",
-      occupation: ""
+      First_name: "",
+      Last_name: "",
+      Email_address: "",
+      Mobile_number: "",
+      Hobbies: "",
+      City: "",
+      Password: "",
+      Confirm_password: "",
+      Gender: "",
+      Occupation: ""
     },
     formData: {
-      fname: "",
-      lname: "",
-      mname: "",
-      email: "",
-      mobile: "",
-      city: "",
-      password: "",
-      cpassword: "",
-      gender: "male",
-      occupation: ""
+      First_name: "",
+      Last_name: "",
+      Middle_name: "",
+      Email_address: "",
+      Mobile_number: "",
+      Hobbies: [],
+      City: "",
+      Password: "",
+      Confirm_password: "",
+      Gender: "",
+      Occupation: ""
     },
-    hobbies: [],
     submitMsg: ""
   }
 
   handleHobbies = (event) => {
-    const { hobbies } = this.state
+    const { Hobbies } = this.state.formData;
+    const { formData, error } = this.state;
     let index;
     if (event.target.checked) {
-      hobbies.push(event.target.value)
-    } else {
-      index = hobbies.indexOf(event.target.value)
-      hobbies.splice(index, 1)
+      Hobbies.push(event.target.value)
+      error[event.target.name] = "";
+      this.setState({ error, submitMsg: "" })
     }
-    this.setState({ hobbies: hobbies })
+    else {
+      index = Hobbies.indexOf(event.target.value)
+      Hobbies.splice(index, 1)
+    }
+    this.setState({ formData: { ...formData, Hobbies: Hobbies }, submitMsg: "" })
   }
   handleEvent = (event) => {
-    const { formData } = this.state;
+    const { formData, error } = this.state;
+    const isCheckBox = event.target.type;
     this.setState({
       formData: {
         ...formData,
         [event.target.name]: event.target.value
       }
     })
+    if (isCheckBox) {
+      error[event.target.name] = "";
+      this.setState({ error, submitMsg: "" });
+    }
   }
   required = (event) => {
-    let { error } = this.state;
-    event.target.value
-      ? this.setState({
-        error: {
-          ...error,
-          [event.target.name]: ""
-        }
-      })
-      : this.setState({
-        error: {
-          ...error,
-          [event.target.name]: "Required field"
-        }
-      })
+    const { error } = this.state;
+    if (event.target.value) {
+      error[event.target.name] = "";
+      this.setState({ error });
+      event.target.style.borderColor = "green";
+    }
+    else {
+      error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
+      event.target.style.borderColor = "red";
+      this.setState({ error })
+    }
   }
   validator = (event) => {
     const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /^[#\w@_-]{6,15}$/;
-    const name = event.target.name;
+    const { name } = event.target;
     const { error } = this.state;
-    const { mobile, email, password, cpassword } = this.state.formData;
+    const { Mobile_number, Email_address, Password, Confirm_password } = this.state.formData;
     switch (name) {
-      case 'fname':
+      case 'First_name':
         this.required(event);
         break;
-      case 'lname':
+      case 'Last_name':
         this.required(event);
         break;
-      case 'email':
-        emailRegex.test(email)
-          ? this.setState({
-            error: {
-              ...error,
-              [event.target.name]: ""
-            }
-          })
-          : this.setState({
-            error: {
-              ...error,
-              [event.target.name]: "Invalid email"
-            }
-          })
+      case 'Email_address':
+        if (emailRegex.test(Email_address)) {
+          error[event.target.name] = "";
+          this.setState({ error, submitMsg: "" })
+          event.target.style.borderColor = "green";
+        }
+        else {
+          error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
+          event.target.style.borderColor = "red";
+          this.setState({ error, submitMsg: "" })
+        }
         break;
-      case 'password':
-        passwordRegex.test(password)
-          ? this.setState({
-            error: {
-              ...error,
-              [event.target.name]: ""
-            }
-          })
-          : this.setState({
-            error: {
-              ...error,
-              [event.target.name]: "Password must be greater than 6 digit & contains 1 special character"
-            }
-          })
+      case 'Password':
+        if (passwordRegex.test(Password)) {
+          error[event.target.name] = "";
+          this.setState({ error, submitMsg: "" })
+          event.target.style.borderColor = "green";
+        }
+        else {
+          error[event.target.name] = "Password must be greater than 6 digit & contains 1 special character";
+          event.target.style.borderColor = "red";
+          this.setState({ error, submitMsg: "" })
+        }
         break;
-      case 'cpassword':
-        (cpassword === password)
-          ? this.setState({
-            error: {
-              ...error,
-              [event.target.name]: ""
-            }
-          })
-          : this.setState({
-            error: {
-              ...error,
-              [event.target.name]: "Password mismatch"
-            }
-          })
+      case 'Confirm_password':
+        if (Confirm_password === "") {
+          error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
+          event.target.style.borderColor = "red";
+          this.setState({ error, submitMsg: "" })
+        }
+        else if (Confirm_password === Password && passwordRegex.test(Confirm_password)) {
+          error[event.target.name] = "";
+          this.setState({ error, submitMsg: "" })
+          event.target.style.borderColor = "green";
+        }
+        else {
+          error[event.target.name] = event.target.name.replace("_", " ") + " is invalid or mismatch.";
+          event.target.style.borderColor = "red";
+          this.setState({ error, submitMsg: "" })
+        }
         break;
-      case 'mobile':
-        mobileRegex.test(mobile)
-          ? this.setState({
-            error: {
-              ...error,
-              [event.target.name]: ""
-            }
-          })
-          : this.setState({
-            error: {
-              ...error,
-              [event.target.name]: "Invalid mobile number"
-            }
-          })
+      case 'Mobile_number':
+        if (mobileRegex.test(Mobile_number)) {
+          error[event.target.name] = "";
+          event.target.style.borderColor = "green";
+          this.setState({ error, submitMsg: "" })
+        }
+        else {
+          error[event.target.name] = event.target.name.replace("_", " ") + " is invalid.";
+          event.target.style.borderColor = "red";
+          this.setState({ error, submitMsg: "" })
+        }
         break;
     }
   }
   submitData = () => {
-    const { error, formData, hobbies } = this.state;
-    let submit = false
-    error.map(err => {
-      err=""?submit=true:submit=false
-    },formData.map(fdata =>{
-      fdata=""?submit=false:submit=true
-    }))
-     console.log(submit)
+    const { formData, error, submitMsg } = this.state;
+    Object.keys(formData).map(data => {
+      if (formData[data] == "" || formData[data].length === 0) {
+        error[data] = data.replace("_", " ") + " is required.";
+        this.setState({ error, submitMsg: "" })
+      }
+      else {
+        this.setState({ submitMsg: "SUCCESS!!" })
+      }
+    })
   }
+
   render() {
     const { error } = this.state;
-    const { fname, lname, mname, mobile, email, city, password, cpassword, occupation, gender } = this.state.formData;
+    const { First_name, Last_name, Middle_name, Mobile_number, Email_address, City, Password, Confirm_password, Occupation, Gender } = this.state.formData;
+    const { submitMsg } = this.state;
     return (
       <div>
         <div className="container card">
@@ -162,33 +165,37 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>First name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter First name" name="fname"
+                  <Form.Label>First name*</Form.Label>
+                  <Form.Control type="text" placeholder="Enter First name" name="First_name"
                     onBlur={this.validator}
-                    value={fname}
+                    value={First_name}
                     onChange={this.handleEvent} />
                   <Form.Text className="text-error">
-                    {error.fname}
+                    {error.First_name}
                   </Form.Text>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <Form.Label>Middle name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter Middle name" name="mname"
-                    value={mname}
+                  <Form.Control type="text" placeholder="Enter Middle name" name="Middle_name"
+                    value={Middle_name}
+                    onBlur={this.required}
                     onChange={this.handleEvent} />
+                  <Form.Text className="text-error">
+                    {error.Middle_name}
+                  </Form.Text>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Last name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter Last name" name="lname"
-                    value={lname}
+                  <Form.Label>Last name*</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Last name" name="Last_name"
+                    value={Last_name}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
                   <Form.Text className="text-error">
-                    {error.lname}
+                    {error.Last_name}
                   </Form.Text>
                 </Form.Group>
               </Col>
@@ -196,51 +203,25 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" name="email"
-                    value={email}
+                  <Form.Label>Email address*</Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" name="Email_address"
+                    value={Email_address}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
                   <Form.Text className="text-error">
-                    {error.email}
+                    {error.Email_address}
                   </Form.Text>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Mobile number</Form.Label>
-                  <Form.Control type="text" placeholder="Enter Mobile number" name="mobile"
-                    value={mobile}
+                  <Form.Label>Mobile number*</Form.Label>
+                  <Form.Control type="text" placeholder="Enter Mobile number" name="Mobile_number"
+                    value={Mobile_number}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
                   <Form.Text className="text-error">
-                    {error.mobile}
-                  </Form.Text>
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Enter password" name="password"
-                    value={password}
-                    onBlur={this.validator}
-                    onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.password}
-                  </Form.Text>
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>Confirm pasword</Form.Label>
-                  <Form.Control type="password" placeholder="Enter password" name="cpassword"
-                    value={cpassword}
-                    onBlur={this.validator}
-                    onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.cpassword}
+                    {error.Mobile_number}
                   </Form.Text>
                 </Form.Group>
               </Col>
@@ -248,8 +229,34 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>City</Form.Label>
-                  <Form.Control as="select" name="city" value={city}
+                  <Form.Label>Password*</Form.Label>
+                  <Form.Control type="password" placeholder="Enter password" name="Password"
+                    value={Password}
+                    onBlur={this.validator}
+                    onChange={this.handleEvent} />
+                  <Form.Text className="text-error">
+                    {error.Password}
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Confirm pasword*</Form.Label>
+                  <Form.Control type="password" placeholder="Enter password" name="Confirm_password"
+                    value={Confirm_password}
+                    onBlur={this.validator}
+                    onChange={this.handleEvent} />
+                  <Form.Text className="text-error">
+                    {error.Confirm_password}
+                  </Form.Text>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form.Group>
+                  <Form.Label>City*</Form.Label>
+                  <Form.Control as="select" name="City" value={City}
                     onBlur={this.required}
                     onChange={this.handleEvent}>
                     <option value="" label="-- select ---" />
@@ -258,56 +265,64 @@ class App extends React.Component {
                     <option value="rajkot" label="Rajkot" />
                   </Form.Control>
                   <Form.Text className="text-error">
-                    {error.city}
+                    {error.City}
                   </Form.Text>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Label>Gender</Form.Label>
+                <Form.Label>Gender*</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="radio" label="Male" name="gender" value="male"
-                    checked={gender === "male"}
+                  <Form.Check inline type="radio" label="Male" name="Gender" value="male"
+                    onBlur={this.required}
+                    checked={Gender === "male"}
                     onChange={this.handleEvent} />
-                  <Form.Check inline type="radio" name="gender" label="Female" value="female"
-                    checked={gender === "female"}
+                  <Form.Check inline type="radio" name="Gender" label="Female" value="female"
+                    onBlur={this.required}
+                    checked={Gender === "female"}
                     onChange={this.handleEvent} />
                 </Form.Group>
+                <Form.Text className="text-error">
+                  {error.Gender}
+                </Form.Text>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Label>Occupation</Form.Label>
+                <Form.Label>Occupation*</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" value="student" name="occupation" label="Student"
-                    checked={occupation === "student"}
+                  <Form.Check inline type="checkbox" value="student" name="Occupation" label="Student"
+                    checked={Occupation === "student"}
                     onChange={this.handleEvent} />
-                  <Form.Check inline type="checkbox" value="engineer" name="occupation" label="Engineer"
-                    checked={occupation === "engineer"}
+                  <Form.Check inline type="checkbox" value="engineer" name="Occupation" label="Engineer"
+                    checked={Occupation === "engineer"}
                     onChange={this.handleEvent} />
-                  <Form.Check inline type="checkbox" value="doctor" name="occupation" label="Doctor"
-                    checked={occupation === "doctor"}
+                  <Form.Check inline type="checkbox" value="doctor" name="Occupation" label="Doctor"
+                    checked={Occupation === "doctor"}
                     onChange={this.handleEvent} />
                 </Form.Group>
                 <Form.Text className="text-error">
-                  {error.occupation}
+                  {error.Occupation}
                 </Form.Text>
               </Col>
               <Col>
-                <Form.Label>Hobbies</Form.Label>
+                <Form.Label>Hobbies*</Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" label="Reading" value="Reading" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Writing" value="Writing" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Singing" value="Singing" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Programming" value="Programming" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Reading" name="Hobbies" value="Reading" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Writing" name="Hobbies" value="Writing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Singing" name="Hobbies" value="Singing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" label="Programming" name="Hobbies" value="Programming" onChange={this.handleHobbies} />
                 </Form.Group>
                 <Form.Text className="text-error">
-                  {error.hobbies}
+                  {error.Hobbies}
                 </Form.Text>
               </Col>
             </Row>
             <Row>
               <Col>
                 <Button type="button" onClick={this.submitData}>Submit</Button>
+                <Form.Text className="submit-msg">
+                  {submitMsg}
+                </Form.Text>
               </Col>
             </Row>
           </Form>
