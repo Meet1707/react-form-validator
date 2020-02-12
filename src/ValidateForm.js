@@ -59,7 +59,7 @@ class ValidateForm extends React.Component {
         this.setState({ error })
     }
     validator = (event) => {
-        const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/;
+        const mobileRegex = /^\d{10}$/, emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})/, passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/;
         const { name } = event.target;
         const { error } = this.state;
         const { Mobile_number, Email_address, Password, Confirm_password } = this.state.formData;
