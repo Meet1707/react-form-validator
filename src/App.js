@@ -47,7 +47,7 @@ class App extends React.Component {
     }
     this.setState({ formData: { ...formData, Hobbies: Hobbies }, submitMsg: "" })
   }
-  handleEvent = (event) => {
+  handleChange = (event) => {
     const { formData, error } = this.state;
     const isCheckBox = event.target.type;
     this.setState({
@@ -70,7 +70,7 @@ class App extends React.Component {
     this.setState({ error })
   }
   validator = (event) => {
-    const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /^[#\w@_-]{6,15}$/;
+    const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/;
     const { name } = event.target;
     const { error } = this.state;
     const { Mobile_number, Email_address, Password, Confirm_password } = this.state.formData;
@@ -96,10 +96,10 @@ class App extends React.Component {
         if (passwordRegex.test(Password))
           error[event.target.name] = "";
         else
-          error[event.target.name] = "Password must be greater than 6 digit & contains 1 special character";
+          error[event.target.name] = "Password must be greater than 6 characters & Combination of upper and lower case & special character";
         break;
       case 'Confirm_password':
-        if (Confirm_password === "")
+        if (Confirm_password)
           error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
         else if (Confirm_password === Password && passwordRegex.test(Confirm_password))
           error[event.target.name] = "";
@@ -143,12 +143,12 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>First name*</Form.Label>
+                  <Form.Label>First name <label className="required-field">*</label></Form.Label>
                   <Form.Control type="text" placeholder="Enter First name" name="First_name"
                     className={error.First_name ? "red-border" : ""}
                     onBlur={this.validator}
                     value={First_name}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.First_name ? <Form.Text className="text-error">{error.First_name}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
@@ -157,18 +157,18 @@ class App extends React.Component {
                   <Form.Label>Middle name</Form.Label>
                   <Form.Control type="text" placeholder="Enter Middle name" name="Middle_name"
                     value={Middle_name}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                 </Form.Group>
               </Col>
 
               <Col>
                 <Form.Group>
-                  <Form.Label>Last name*</Form.Label>
+                  <Form.Label>Last name <label className="required-field">*</label></Form.Label>
                   <Form.Control type="text" placeholder="Enter Last name" name="Last_name"
                     className={error.Last_name ? "red-border" : ""}
                     value={Last_name}
                     onBlur={this.validator}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.Last_name ? <Form.Text className="text-error">{error.Last_name}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
@@ -176,23 +176,23 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Email address*</Form.Label>
+                  <Form.Label>Email address <label className="required-field">*</label></Form.Label>
                   <Form.Control type="email" placeholder="Enter email" name="Email_address"
                     className={error.Email_address ? "red-border" : ""}
                     value={Email_address}
                     onBlur={this.validator}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.Email_address ? <Form.Text className="text-error">{error.Email_address}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Mobile number*</Form.Label>
+                  <Form.Label>Mobile number <label className="required-field">*</label></Form.Label>
                   <Form.Control type="text" placeholder="Enter Mobile number" name="Mobile_number"
                     className={error.Mobile_number ? "red-border" : ""}
                     value={Mobile_number}
                     onBlur={this.validator}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.Mobile_number ? <Form.Text className="text-error">{error.Mobile_number}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
@@ -200,23 +200,23 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>Password*</Form.Label>
+                  <Form.Label>Password <label className="required-field">*</label></Form.Label>
                   <Form.Control type="password" placeholder="Enter password" name="Password"
                     className={error.Password ? "red-border" : ""}
                     value={Password}
                     onBlur={this.validator}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.Password ? <Form.Text className="text-error">{error.Password}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
-                  <Form.Label>Confirm pasword*</Form.Label>
+                  <Form.Label>Confirm pasword <label className="required-field">*</label></Form.Label>
                   <Form.Control type="password" placeholder="Enter password" name="Confirm_password"
                     className={error.Confirm_password ? "red-border" : ""}
                     value={Confirm_password}
                     onBlur={this.validator}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   {error.Confirm_password ? <Form.Text className="text-error">{error.Confirm_password}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
@@ -224,11 +224,11 @@ class App extends React.Component {
             <Row>
               <Col>
                 <Form.Group>
-                  <Form.Label>City*</Form.Label>
+                  <Form.Label>City <label className="required-field">*</label></Form.Label>
                   <Form.Control as="select" name="City" value={City}
                     className={error.City ? "red-border" : ""}
                     onBlur={this.required}
-                    onChange={this.handleEvent}>
+                    onChange={this.handleChange}>
                     <option value="" label="-- select ---" />
                     <option value="ahmedabad" label="Ahmedabad" />
                     <option value="surat" label="Surat" />
@@ -238,38 +238,38 @@ class App extends React.Component {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Label>Gender*</Form.Label>
+                <Form.Label>Gender <label className="required-field">*</label></Form.Label>
                 <Form.Group>
                   <Form.Check inline type="radio" label="Male" name="Gender" value="male"
                     onBlur={this.required}
                     checked={Gender === "male"}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   <Form.Check inline type="radio" name="Gender" label="Female" value="female"
                     onBlur={this.required}
                     checked={Gender === "female"}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                 </Form.Group>
                 {error.Gender ? <Form.Text className="text-error">{error.Gender}</Form.Text> : <></>}
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Label>Occupation*</Form.Label>
+                <Form.Label>Occupation <label className="required-field">*</label></Form.Label>
                 <Form.Group>
                   <Form.Check inline type="checkbox" value="student" name="Occupation" label="Student"
                     checked={Occupation === "student"}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   <Form.Check inline type="checkbox" value="engineer" name="Occupation" label="Engineer"
                     checked={Occupation === "engineer"}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                   <Form.Check inline type="checkbox" value="doctor" name="Occupation" label="Doctor"
                     checked={Occupation === "doctor"}
-                    onChange={this.handleEvent} />
+                    onChange={this.handleChange} />
                 </Form.Group>
                 {error.Occupation ? <Form.Text className="text-error">{error.Occupation}</Form.Text> : <></>}
               </Col>
               <Col>
-                <Form.Label>Hobbies*</Form.Label>
+                <Form.Label>Hobbies <label className="required-field">*</label></Form.Label>
                 <Form.Group>
                   <Form.Check inline type="checkbox" label="Reading" name="Hobbies" value="Reading" onChange={this.handleHobbies} />
                   <Form.Check inline type="checkbox" label="Writing" name="Hobbies" value="Writing" onChange={this.handleHobbies} />

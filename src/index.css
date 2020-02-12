@@ -21,7 +21,8 @@ button{
   background-color: #22223b !important;
   color: #fefefe !important;
   min-width: 100% !important;
-  cursor: pointer   ;
+  cursor: pointer;
+  margin-top: 10px !important;
 }
 button:hover {
   background-color: #4a4e69 !important;
@@ -32,4 +33,7 @@ button:hover {
 }
 .red-border{
   border-color: red !important;
+}
+.required-field{
+  color: red;
 }
