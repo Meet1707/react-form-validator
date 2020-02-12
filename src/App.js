@@ -63,22 +63,22 @@ class App extends React.Component {
   }
   required = (event) => {
     const { error } = this.state;
-    if (event.target.value) {
+    if (event.target.value)
       error[event.target.name] = "";
-      this.setState({ error });
-      event.target.style.borderColor = "green";
-    }
-    else {
+    else
       error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
-      event.target.style.borderColor = "red";
-      this.setState({ error })
-    }
+    this.setState({ error })
   }
   validator = (event) => {
     const mobileRegex = /^\d{10}$/, emailRegex = /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, passwordRegex = /^[#\w@_-]{6,15}$/;
     const { name } = event.target;
     const { error } = this.state;
     const { Mobile_number, Email_address, Password, Confirm_password } = this.state.formData;
+    if (event.target.name !== 'First_name') {
+
+      let obj = {};
+      obj[event.target.name] = event.target.value
+    }
     switch (name) {
       case 'First_name':
         this.required(event);
@@ -87,71 +87,49 @@ class App extends React.Component {
         this.required(event);
         break;
       case 'Email_address':
-        if (emailRegex.test(Email_address)) {
+        if (emailRegex.test(Email_address))
           error[event.target.name] = "";
-          this.setState({ error, submitMsg: "" })
-          event.target.style.borderColor = "green";
-        }
-        else {
-          error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
-          event.target.style.borderColor = "red";
-          this.setState({ error, submitMsg: "" })
-        }
+        else
+          error[event.target.name] = event.target.name.replace("_", " ") + " is invalid.";
         break;
       case 'Password':
-        if (passwordRegex.test(Password)) {
+        if (passwordRegex.test(Password))
           error[event.target.name] = "";
-          this.setState({ error, submitMsg: "" })
-          event.target.style.borderColor = "green";
-        }
-        else {
+        else
           error[event.target.name] = "Password must be greater than 6 digit & contains 1 special character";
-          event.target.style.borderColor = "red";
-          this.setState({ error, submitMsg: "" })
-        }
         break;
       case 'Confirm_password':
-        if (Confirm_password === "") {
+        if (Confirm_password === "")
           error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
-          event.target.style.borderColor = "red";
-          this.setState({ error, submitMsg: "" })
-        }
-        else if (Confirm_password === Password && passwordRegex.test(Confirm_password)) {
+        else if (Confirm_password === Password && passwordRegex.test(Confirm_password))
           error[event.target.name] = "";
-          this.setState({ error, submitMsg: "" })
-          event.target.style.borderColor = "green";
-        }
-        else {
+        else
           error[event.target.name] = event.target.name.replace("_", " ") + " is invalid or mismatch.";
-          event.target.style.borderColor = "red";
-          this.setState({ error, submitMsg: "" })
-        }
         break;
       case 'Mobile_number':
-        if (mobileRegex.test(Mobile_number)) {
+        if (mobileRegex.test(Mobile_number))
           error[event.target.name] = "";
-          event.target.style.borderColor = "green";
-          this.setState({ error, submitMsg: "" })
-        }
-        else {
+        else
           error[event.target.name] = event.target.name.replace("_", " ") + " is invalid.";
-          event.target.style.borderColor = "red";
-          this.setState({ error, submitMsg: "" })
-        }
         break;
     }
+    this.setState({ error })
   }
   submitData = () => {
-    const { formData, error, submitMsg } = this.state;
+    let { formData, error } = this.state;
+    let submit = "";
     Object.keys(formData).map(data => {
-      if (formData[data] == "" || formData[data].length === 0) {
-        error[data] = data.replace("_", " ") + " is required.";
-        this.setState({ error, submitMsg: "" })
-      }
-      else {
-        this.setState({ submitMsg: "SUCCESS!!" })
-      }
+      if (data !== "Middle_name")
+        if (formData[data] == "" || formData[data].length === 0) {
+          error[data] = data.replace("_", " ") + " is required.";
+          this.setState({ error })
+        }
     })
+
+    Object.keys(error).map(errMsg => {
+      error[errMsg] === "" ? submit = "Success" : submit = ""
+    })
+    this.setState({ submitMsg: submit })
   }
 
   render() {
@@ -167,12 +145,11 @@ class App extends React.Component {
                 <Form.Group>
                   <Form.Label>First name*</Form.Label>
                   <Form.Control type="text" placeholder="Enter First name" name="First_name"
+                    className={error.First_name ? "red-border" : ""}
                     onBlur={this.validator}
                     value={First_name}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.First_name}
-                  </Form.Text>
+                  {error.First_name ? <Form.Text className="text-error">{error.First_name}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
@@ -180,23 +157,19 @@ class App extends React.Component {
                   <Form.Label>Middle name</Form.Label>
                   <Form.Control type="text" placeholder="Enter Middle name" name="Middle_name"
                     value={Middle_name}
-                    onBlur={this.required}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Middle_name}
-                  </Form.Text>
                 </Form.Group>
               </Col>
+
               <Col>
                 <Form.Group>
                   <Form.Label>Last name*</Form.Label>
                   <Form.Control type="text" placeholder="Enter Last name" name="Last_name"
+                    className={error.Last_name ? "red-border" : ""}
                     value={Last_name}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Last_name}
-                  </Form.Text>
+                  {error.Last_name ? <Form.Text className="text-error">{error.Last_name}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
             </Row>
@@ -205,24 +178,22 @@ class App extends React.Component {
                 <Form.Group>
                   <Form.Label>Email address*</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" name="Email_address"
+                    className={error.Email_address ? "red-border" : ""}
                     value={Email_address}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Email_address}
-                  </Form.Text>
+                  {error.Email_address ? <Form.Text className="text-error">{error.Email_address}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <Form.Label>Mobile number*</Form.Label>
                   <Form.Control type="text" placeholder="Enter Mobile number" name="Mobile_number"
+                    className={error.Mobile_number ? "red-border" : ""}
                     value={Mobile_number}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Mobile_number}
-                  </Form.Text>
+                  {error.Mobile_number ? <Form.Text className="text-error">{error.Mobile_number}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
             </Row>
@@ -231,24 +202,22 @@ class App extends React.Component {
                 <Form.Group>
                   <Form.Label>Password*</Form.Label>
                   <Form.Control type="password" placeholder="Enter password" name="Password"
+                    className={error.Password ? "red-border" : ""}
                     value={Password}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Password}
-                  </Form.Text>
+                  {error.Password ? <Form.Text className="text-error">{error.Password}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group>
                   <Form.Label>Confirm pasword*</Form.Label>
                   <Form.Control type="password" placeholder="Enter password" name="Confirm_password"
+                    className={error.Confirm_password ? "red-border" : ""}
                     value={Confirm_password}
                     onBlur={this.validator}
                     onChange={this.handleEvent} />
-                  <Form.Text className="text-error">
-                    {error.Confirm_password}
-                  </Form.Text>
+                  {error.Confirm_password ? <Form.Text className="text-error">{error.Confirm_password}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
             </Row>
@@ -257,6 +226,7 @@ class App extends React.Component {
                 <Form.Group>
                   <Form.Label>City*</Form.Label>
                   <Form.Control as="select" name="City" value={City}
+                    className={error.City ? "red-border" : ""}
                     onBlur={this.required}
                     onChange={this.handleEvent}>
                     <option value="" label="-- select ---" />
@@ -264,9 +234,7 @@ class App extends React.Component {
                     <option value="surat" label="Surat" />
                     <option value="rajkot" label="Rajkot" />
                   </Form.Control>
-                  <Form.Text className="text-error">
-                    {error.City}
-                  </Form.Text>
+                  {error.City ? <Form.Text className="text-error">{error.City}</Form.Text> : <></>}
                 </Form.Group>
               </Col>
               <Col>
@@ -281,9 +249,7 @@ class App extends React.Component {
                     checked={Gender === "female"}
                     onChange={this.handleEvent} />
                 </Form.Group>
-                <Form.Text className="text-error">
-                  {error.Gender}
-                </Form.Text>
+                {error.Gender ? <Form.Text className="text-error">{error.Gender}</Form.Text> : <></>}
               </Col>
             </Row>
             <Row>
@@ -300,9 +266,7 @@ class App extends React.Component {
                     checked={Occupation === "doctor"}
                     onChange={this.handleEvent} />
                 </Form.Group>
-                <Form.Text className="text-error">
-                  {error.Occupation}
-                </Form.Text>
+                {error.Occupation ? <Form.Text className="text-error">{error.Occupation}</Form.Text> : <></>}
               </Col>
               <Col>
                 <Form.Label>Hobbies*</Form.Label>
@@ -312,17 +276,13 @@ class App extends React.Component {
                   <Form.Check inline type="checkbox" label="Singing" name="Hobbies" value="Singing" onChange={this.handleHobbies} />
                   <Form.Check inline type="checkbox" label="Programming" name="Hobbies" value="Programming" onChange={this.handleHobbies} />
                 </Form.Group>
-                <Form.Text className="text-error">
-                  {error.Hobbies}
-                </Form.Text>
+                {error.Hobbies ? <Form.Text className="text-error">{error.Hobbies}</Form.Text> : <></>}
               </Col>
             </Row>
             <Row>
               <Col>
                 <Button type="button" onClick={this.submitData}>Submit</Button>
-                <Form.Text className="submit-msg">
-                  {submitMsg}
-                </Form.Text>
+                {submitMsg ? <Form.Text className="submit">{submitMsg}</Form.Text> : <></>}
               </Col>
             </Row>
           </Form>

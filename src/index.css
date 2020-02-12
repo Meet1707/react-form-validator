@@ -30,3 +30,6 @@ button:hover {
 .submit-msg{
   color: green !important;
 }
+.red-border{
+  border-color: red !important;
+}
