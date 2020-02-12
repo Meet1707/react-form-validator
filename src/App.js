@@ -94,7 +94,7 @@ class App extends React.Component {
           error[event.target.name] = "Password must be greater than 6 characters & Combination of upper and lower case & special character";
         break;
       case 'Confirm_password':
-        if (Confirm_password)
+        if (!Confirm_password)
           error[event.target.name] = event.target.name.replace("_", " ") + " is required.";
         else if (Confirm_password === Password && passwordRegex.test(Confirm_password))
           error[event.target.name] = "";
@@ -112,7 +112,7 @@ class App extends React.Component {
   }
   submitData = () => {
     let { formData, error } = this.state;
-    let submit = "";
+    let submit = "initial";
     Object.keys(formData).map(data => {
       if (data !== "Middle_name")
         if (formData[data] == "" || formData[data].length === 0) {
@@ -121,10 +121,13 @@ class App extends React.Component {
         }
     })
 
-    Object.keys(error).map(errMsg => {
-      error[errMsg] === "" ? submit = "Success" : submit = ""
-    })
-    this.setState({ submitMsg: submit })
+    Object.values(error).map(errMsg => {
+      if(!errMsg && submit)
+          submit = "success"
+      else
+          submit = ""
+  })
+  this.setState({ submitMsg: submit })
   }
 
   render() {
