@@ -74,11 +74,6 @@ class App extends React.Component {
     const { name } = event.target;
     const { error } = this.state;
     const { Mobile_number, Email_address, Password, Confirm_password } = this.state.formData;
-    if (event.target.name !== 'First_name') {
-
-      let obj = {};
-      obj[event.target.name] = event.target.value
-    }
     switch (name) {
       case 'First_name':
         this.required(event);
@@ -240,11 +235,11 @@ class App extends React.Component {
               <Col>
                 <Form.Label>Gender <label className="required-field">*</label></Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="radio" label="Male" name="Gender" value="male"
+                  <Form.Check inline type="radio" label="Male" name="Gender" value="male" id="male"
                     onBlur={this.required}
                     checked={Gender === "male"}
                     onChange={this.handleChange} />
-                  <Form.Check inline type="radio" name="Gender" label="Female" value="female"
+                  <Form.Check inline type="radio" name="Gender" label="Female" value="female" id="female"
                     onBlur={this.required}
                     checked={Gender === "female"}
                     onChange={this.handleChange} />
@@ -256,13 +251,13 @@ class App extends React.Component {
               <Col>
                 <Form.Label>Occupation <label className="required-field">*</label></Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" value="student" name="Occupation" label="Student"
+                  <Form.Check inline type="checkbox" value="student" name="Occupation" label="Student" id="Student"
                     checked={Occupation === "student"}
                     onChange={this.handleChange} />
-                  <Form.Check inline type="checkbox" value="engineer" name="Occupation" label="Engineer"
+                  <Form.Check inline type="checkbox" value="engineer" name="Occupation" label="Engineer" id="Engineer"
                     checked={Occupation === "engineer"}
                     onChange={this.handleChange} />
-                  <Form.Check inline type="checkbox" value="doctor" name="Occupation" label="Doctor"
+                  <Form.Check inline type="checkbox" value="doctor" name="Occupation" label="Doctor" id="Doctor"
                     checked={Occupation === "doctor"}
                     onChange={this.handleChange} />
                 </Form.Group>
@@ -271,10 +266,10 @@ class App extends React.Component {
               <Col>
                 <Form.Label>Hobbies <label className="required-field">*</label></Form.Label>
                 <Form.Group>
-                  <Form.Check inline type="checkbox" label="Reading" name="Hobbies" value="Reading" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Writing" name="Hobbies" value="Writing" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Singing" name="Hobbies" value="Singing" onChange={this.handleHobbies} />
-                  <Form.Check inline type="checkbox" label="Programming" name="Hobbies" value="Programming" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" id="Reading" label="Reading" name="Hobbies" value="Reading" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" id="Writing" label="Writing" name="Hobbies" value="Writing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" id="Singing" label="Singing" name="Hobbies" value="Singing" onChange={this.handleHobbies} />
+                  <Form.Check inline type="checkbox" id="Programming" label="Programming" name="Hobbies" value="Programming" onChange={this.handleHobbies} />
                 </Form.Group>
                 {error.Hobbies ? <Form.Text className="text-error">{error.Hobbies}</Form.Text> : <></>}
               </Col>
